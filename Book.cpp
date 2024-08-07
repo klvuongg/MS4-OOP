@@ -1,3 +1,17 @@
+/* Citation and Sources...
+Final Project Milestone 1
+Module: Book
+Filename: Book.cpp
+Version 1.0
+Author	Kaitlyn Vuong
+Revision History
+-----------------------------------------------------------
+Name               Date                 Reason
+-----------------------------------------------------------
+I have done all the coding by myself and only copied the code
+that my professor provided to complete my workshops and assignments.
+-----------------------------------------------------------*/
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <cstring>
@@ -22,7 +36,7 @@ namespace seneca {
 	Book& Book::operator=(const Book& b) {
 		if (this != &b) {
 			(Publication&)*this = b;
-			if (author_name) {
+			if (b.author_name) {
 				delete[] author_name;
 				author_name = new char[strlen(b.author_name) + 1];
 				strcpy(author_name, b.author_name);
@@ -54,7 +68,7 @@ namespace seneca {
 			}
 		}
 		else {
-			os << "\t" << author_name;
+			os << author_name;
 		}
 		return os;
 	}
@@ -67,13 +81,11 @@ namespace seneca {
 		if (conIO(istr)) {
 			istr.ignore();
 			cout << "Author: ";
-			istr.getline(aName, 256);
-			istr.ignore();
+			istr.get(aName, 256);
 		}
 		else {
 			istr.ignore();
-			istr.getline(aName, 256);
-			istr.ignore();
+			istr.get(aName, 256);
 		}
 
 		if (istr) {
@@ -93,6 +105,6 @@ namespace seneca {
 	}
 
 	Book::operator bool() const {
-		return author_name && Publication::operator bool();
+		return author_name && author_name[0] != '\0' && Publication::operator bool();
 	}
 }

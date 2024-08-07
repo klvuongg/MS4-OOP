@@ -1,3 +1,22 @@
+/* Citation and Sources...
+Final Project Milestone 1
+Module: Publication
+Filename: Publication.cpp
+Version 2.0
+Author	Kaitlyn Vuong
+Revision History
+---------------------------------------------------------------------
+Name                         Date                 Reason
+write function updated    2024/03/08     updated write function so  
+                                         that the book title can fit
+read function updated     2024/03/08     updated read function so  
+                                         that the book title can be
+										 read into a bigger buffer
+---------------------------------------------------------------------
+I have done all the coding by myself and only copied the code
+that my professor provided to complete my workshops and assignments.
+-----------------------------------------------------------*/
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <cstring>
@@ -68,8 +87,14 @@ namespace seneca {
 	std::ostream& Publication::write(std::ostream& os) const {
 		if (conIO(os)) {
 			if (*this) {
-				os << "| " << setw(SENECA_SHELF_ID_LEN) << setfill(' ') << m_shelfId << " | "
-					<< left << setw(SENECA_TITLE_WIDTH) << setfill('.') << (m_title ? m_title : "") << " | ";
+				os << "| " << setw(SENECA_SHELF_ID_LEN) << setfill(' ') << m_shelfId << " | ";
+				if (strlen(m_title) > SENECA_TITLE_WIDTH) {
+					os.write(m_title, SENECA_TITLE_WIDTH);
+				}
+				else {
+					os << left << setw(SENECA_TITLE_WIDTH) << setfill('.') << (m_title ? m_title : "");
+				}
+				os << " | ";
 				if (m_membership != 0) {
 					os << setw(5) << setfill(' ') << m_membership;
 				}
@@ -96,7 +121,7 @@ namespace seneca {
 		m_libRef = -1;
 		m_date = Date();
 		char shelfId[SENECA_SHELF_ID_LEN + 1];
-		char title[SENECA_TITLE_WIDTH + 1];
+		char title[256];
 		int membership = 0;
 		int libRef = -1;
 		Date date;
@@ -109,17 +134,15 @@ namespace seneca {
 				return istr;
 			}
 			cout << "Title: ";
-			istr.getline(title, SENECA_TITLE_WIDTH + 1);
+			istr.getline(title, 256); 
 			cout << "Date: ";
 			istr >> date;
 		}
 		else {
 			istr >> libRef;
 			istr.ignore();
-			istr >> shelfId;
-			istr.ignore();
-			istr >> title;
-			istr.ignore();
+			istr.getline(shelfId, SENECA_SHELF_ID_LEN + 1, '\t');
+			istr.getline(title, 256, '\t'); 
 			istr >> membership;
 			istr.ignore();
 			istr >> date;
